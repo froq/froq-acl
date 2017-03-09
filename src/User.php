@@ -1,15 +1,64 @@
 <?php
+/**
+ * Copyright (c) 2016 Kerem Güneş
+ *     <k-gun@mail.com>
+ *
+ * GNU General Public License v3.0
+ *     <http://www.gnu.org/licenses/gpl-3.0.txt>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 declare(strict_types=1);
 
 namespace Froq\Acl;
 
+/**
+ * @package    Froq
+ * @subpackage Froq\Acl
+ * @object     Froq\Acl\User
+ * @author     Kerem Güneş <k-gun@mail.com>
+ */
 final class User
 {
+    /**
+     * Id.
+     * @var int|string
+     */
     private $id;
+
+    /**
+     * Name.
+     * @var string
+     */
     private $name;
+
+    /**
+     * Role.
+     * @var string
+     */
     private $role;
+
+    /**
+     * Permissions.
+     * @var array
+     */
     private $permissions = [];
 
+    /**
+     * Constructor.
+     * @param array|null $info
+     */
     final public function __construct(array $info = null)
     {
         if ($info) {
@@ -19,95 +68,199 @@ final class User
         }
     }
 
-    final public function setId($id)
+    /**
+     * Set id.
+     * @param  int|string $id
+     * @return self
+     */
+    final public function setId($id): self
     {
         $this->id = $id;
+
+        return $this;
     }
+
+    /**
+     * Get id.
+     * @return int|string
+     */
     final public function getId()
     {
         return $this->id;
     }
 
-    final public function setName(string $name)
+    /**
+     * Set name.
+     * @param  string $name
+     * @return self
+     */
+    final public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
+
+    /**
+     * Get name.
+     * @return string
+     */
     final public function getName()
     {
         return $this->name;
     }
 
-    final public function setRole(string $role)
+
+    /**
+     * Set role.
+     * @param  string $role
+     * @return self
+     */
+    final public function setRole(string $role): self
     {
         $this->role = $role;
+
+        return $this;
     }
+
+    /**
+     * Get role.
+     * @param string|null
+     */
     final public function getRole()
     {
         return $this->role;
     }
 
-    final public function setPermission($uri, array $permission)
-    {
-        $this->permissions[$uri] = $permission;
-    }
-    final public function getPermission($uri)
-    {
-        return $this->permissions[$uri] ?? null;
-    }
-
-    final public function setPermissions(array $permissions)
+    /**
+     * Set permissions.
+     * @param  array $permissions
+     * @return self
+     */
+    final public function setPermissions(array $permissions): self
     {
         $this->permissions = $permissions;
+
+        return $this;
     }
+
+    /**
+     * Get permissions.
+     * @return array
+     */
     final public function getPermissions(): array
     {
         return $this->permissions;
     }
 
+    /**
+     * Set permission of.
+     * @param  string $uri
+     * @param  array  $permission
+     * @return self
+     */
+    final public function setPermissionsOf($uri, array $permission): self
+    {
+        $this->permissions[$uri] = $permission;
+
+        return $this;
+    }
+
+    /**
+     * Get permission of.
+     * @param  string $uri
+     * @return array|null
+     */
+    final public function getPermissionsOf($uri)
+    {
+        return ($this->permissions[$uri] ?? null);
+    }
+
+    /**
+     * Is logged in.
+     * @return bool
+     */
     final public function isLoggedIn(): bool
     {
         return ($this->id !== null);
     }
 
+    /**
+     * Has access to.
+     * @param  string $uri
+     * @return bool
+     */
     final public function hasAccessTo(string $uri): bool
     {
-        return !!$this->getPermission($uri);
+        return !!$this->getPermissionsOf($uri);
     }
 
-    // // Alice: read,write; Bob: read
-    // final public function canRead(Resource $resource): bool
-    // {
-    //     return $this->role->canRead($resource);
-    //
-    //     $permissions = $this->getPermission($uri);
-        // if ($permissions) {
-        //     foreach ($permissions as $permission) {
-        //         if ($permission == Acl::RULE_ALL || $permission == Acl::RULE_READ) {
-        //             return true;
-        //         }
-        //     }
-        // }
-        // return false;
-    // }
-    // final public function canWrite(Resource $resource): bool
-    // {
-    //     return $this->role->canWrite($resource);
-    // }
+    /**
+     * Can read.
+     * @param  string $uri
+     * @return bool
+     */
+    final public function canRead(string $uri): bool
+    {
+        // /book => all
+        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($this->getUriRoot($uri)))) {
+            return true;
+        }
 
-    // final public function info(bool $full = false)
-    // {
-    //     if ($this->id === null && $this->name === null) {
-    //         return null;
-    //     }
+        // /book/detail => all or read
+        $permission = array_filter((array) $this->getPermissionsOf($uri), function($rule) {
+            return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
+        });
 
-    //     $return = sprintf('id=%s(%s)', $this->id, $this->name);
-    //     if ($full) {
-    //         foreach ($this->role->getResources() as $resource) {
-    //             $return .= sprintf("\nresource(%s:%s)",
-    //                 $resource->getName(), join(',', $resource->getPermissions()));
-    //         }
-    //     }
+        return !empty($permission);
+    }
 
-    //     return $return;
-    // }
+    /**
+     * Can write.
+     * @param  string $uri
+     * @return bool
+     */
+    final public function canWrite(string $uri): bool
+    {
+        // /book => all
+        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($this->getUriRoot($uri)))) {
+            return true;
+        }
+
+        // /book/detail => all or write
+        $permission = array_filter((array) $this->getPermissionsOf($uri), function($rule) {
+            return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
+        });
+
+        return !empty($permission);
+    }
+
+    /**
+     * Info.
+     * @param  bool $full
+     * @return string
+     */
+    final public function info(bool $full = false)
+    {
+        $return = sprintf('%s: id=%s(%s)', $this->role, $this->id, $this->name);
+        if ($full) {
+            foreach ($this->permissions as $uri => $rules) {
+                $return .= sprintf("\n uri(%s %s)", $uri, join(',', $rules));
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * Get root uri.
+     * @param  string $uri
+     * @return string
+     */
+    final private function getUriRoot(string $uri): string
+    {
+        $uri .= '/'; // ensure slash
+
+        return substr($uri, 0, strpos($uri, '/', 1));
+    }
 }
