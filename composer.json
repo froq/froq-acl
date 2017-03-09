@@ -12,5 +12,7 @@
         "froq/froq-util": "~1.0",
         "froq/froq-service": "~1.0"
     },
-    "minimum-stability": "stable"
+    "autoload": {
+        "classmap": ["src/"]
+    }
 }
