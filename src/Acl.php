@@ -83,6 +83,7 @@ final class Acl
     final public function setUser(User $user): self
     {
         $this->user = $user;
+        $this->user->setAcl($this);
 
         $userRole = $this->user->getRole();
         if ($userRole && !empty($this->rules)) {

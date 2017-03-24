@@ -32,6 +32,12 @@ namespace Froq\Acl;
 final class User
 {
     /**
+     * Acl.
+     * @var Froq\Acl\Acl.
+     */
+    private $acl;
+
+    /**
      * Id.
      * @var int|string
      */
@@ -66,6 +72,26 @@ final class User
             isset($info['name']) && $this->setName($info['name']);
             isset($info['role']) && $this->setRole($info['role']);
         }
+    }
+
+    /**
+     * Set acl.
+     * @param Froq\Acl\Acl $acl
+     */
+    final public function setAcl(Acl $acl): self
+    {
+        $this->acl = $acl;
+
+        return $this;
+    }
+
+    /**
+     * Get Acl.
+     * @return Froq\Acl\Acl|null
+     */
+    final public function getAcl()
+    {
+        return $this->acl;
     }
 
     /**
@@ -233,6 +259,22 @@ final class User
         });
 
         return !empty($permission);
+    }
+
+    /**
+     * Redirect if.
+     * @param  string $dir
+     * @param  string $to
+     * @return void
+     */
+    final public function redirectIf(string $dir, string $to = '/')
+    {
+        $app = app();
+        if ($dir == 'in' && $this->isLoggedIn()) {
+            return $app->response->redirect($to);
+        } elseif ($dir == 'out' && !$this->isLoggedIn()) {
+            return $app->response->redirect($to);
+        }
     }
 
     /**
