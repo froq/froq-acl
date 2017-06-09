@@ -283,7 +283,7 @@ final class User
      * @param  bool $full
      * @return string
      */
-    final public function info(bool $full = false)
+    final public function info(bool $full = false): string
     {
         $return = sprintf('%s: id=%s(%s)', $this->role, $this->id, $this->name);
         if ($full) {
