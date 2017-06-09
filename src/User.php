@@ -76,7 +76,8 @@ final class User
 
     /**
      * Set acl.
-     * @param Froq\Acl\Acl $acl
+     * @param  Froq\Acl\Acl $acl
+     * @return self
      */
     final public function setAcl(Acl $acl): self
     {
@@ -151,7 +152,7 @@ final class User
 
     /**
      * Get role.
-     * @param string|null
+     * @return string|null
      */
     final public function getRole()
     {
