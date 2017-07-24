@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace Froq\Acl;
 
 use Froq\Service\Service;
-use Froq\Util\Traits\GetterTrait;
 
 /**
  * @package    Froq
@@ -34,12 +33,6 @@ use Froq\Util\Traits\GetterTrait;
  */
 final class Acl
 {
-    /**
-     * Getter.
-     * @object Froq\Util\Traits\GetterTrait
-     */
-    use GetterTrait;
-
     /**
      * Rules.
      * @const string
@@ -73,6 +66,15 @@ final class Acl
     final public function __construct(Service $service)
     {
         $this->service = $service;
+    }
+
+    /**
+     * Get service.
+     * @return Froq\Service\Service
+     */
+    public function getService(): Service
+    {
+        return $this->service;
     }
 
     /**
