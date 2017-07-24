@@ -279,7 +279,7 @@ final class User
                 return $app->getResponse()->redirect($to);
             }
         } elseif (headers_sent($file, $line)) {
-            throw new AclException(sprintf('Cannot use %s, headers already sent in %s:%s', __method__, $file, $line));
+            throw new AclException(sprintf('Cannot use %s, headers was already sent in %s:%s', __method__, $file, $line));
         }
 
         header('Location: '. trim($to));
