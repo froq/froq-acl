@@ -200,7 +200,7 @@ final class User
      */
     final public function getPermissionsOf($uri)
     {
-        return ($this->permissions[$uri] ?? null);
+        return $this->permissions[$uri] ?? null;
     }
 
     /**
@@ -209,7 +209,7 @@ final class User
      */
     final public function isLoggedIn(): bool
     {
-        return ($this->id !== null);
+        return $this->id !== null;
     }
 
     /**
@@ -264,17 +264,27 @@ final class User
 
     /**
      * Redirect if.
-     * @param  string $dir
+     * @param  string $inOut
      * @param  string $to
+     * @param  bool   $exit
      * @return void
      */
-    final public function redirectIf(string $dir, string $to = '/')
+    final public function redirectIf(string $inOut, string $to = '/', bool $exit = true)
     {
-        $app = app();
-        if ($dir == 'in' && $this->isLoggedIn()) {
-            return $app->response->redirect($to);
-        } elseif ($dir == 'out' && !$this->isLoggedIn()) {
-            return $app->response->redirect($to);
+        if ($this->acl) {
+            $app = $this->acl->getService()->getApp();
+            if ($inOut == 'in' && $this->isLoggedIn()) {
+                return $app->getResponse()->redirect($to);
+            } elseif ($inOut == 'out' && !$this->isLoggedIn()) {
+                return $app->getResponse()->redirect($to);
+            }
+        } elseif (headers_sent($file, $line)) {
+            throw new AclException(sprintf('Cannot use %s, headers already sent in %s:%s', __method__, $file, $line));
+        }
+
+        header('Location: '. trim($to));
+        if ($exit) {
+            exit;
         }
     }
 
