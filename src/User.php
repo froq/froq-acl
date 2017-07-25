@@ -274,9 +274,9 @@ final class User
         if ($this->acl) {
             $app = $this->acl->getService()->getApp();
             if ($inOut == 'in' && $this->isLoggedIn()) {
-                return $app->getResponse()->redirect($to);
+                return $app->response()->redirect($to);
             } elseif ($inOut == 'out' && !$this->isLoggedIn()) {
-                return $app->getResponse()->redirect($to);
+                return $app->response()->redirect($to);
             }
         } elseif (headers_sent($file, $line)) {
             throw new AclException(sprintf('Cannot use %s, headers was already sent in %s:%s', __method__, $file, $line));
