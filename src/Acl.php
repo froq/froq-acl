@@ -63,7 +63,7 @@ final class Acl
      * Constructor.
      * @param Froq\Service\Service $service
      */
-    final public function __construct(Service $service)
+    public function __construct(Service $service)
     {
         $this->service = $service;
     }
@@ -82,7 +82,7 @@ final class Acl
      * @param  Froq\Acl\User $user
      * @return self
      */
-    final public function setUser(User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
         $this->user->setAcl($this);
@@ -107,7 +107,7 @@ final class Acl
      * Get user.
      * @return Froq\Acl\User|null
      */
-    final public function getUser()
+    public function getUser()
     {
         return $this->user;
     }
@@ -117,7 +117,7 @@ final class Acl
      * @param  array $rules
      * @return self
      */
-    final public function setRules(array $rules): self
+    public function setRules(array $rules): self
     {
         $this->rules = $rules;
 
@@ -128,7 +128,7 @@ final class Acl
      * Get rules.
      * @return array
      */
-    final public function getRules(): array
+    public function getRules(): array
     {
         return $this->rules;
     }

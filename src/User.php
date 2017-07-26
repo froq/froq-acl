@@ -65,7 +65,7 @@ final class User
      * Constructor.
      * @param array|null $info
      */
-    final public function __construct(array $info = null)
+    public function __construct(array $info = null)
     {
         if ($info) {
             isset($info['id'])   && $this->setId($info['id']);
@@ -79,7 +79,7 @@ final class User
      * @param  Froq\Acl\Acl $acl
      * @return self
      */
-    final public function setAcl(Acl $acl): self
+    public function setAcl(Acl $acl): self
     {
         $this->acl = $acl;
 
@@ -90,7 +90,7 @@ final class User
      * Get Acl.
      * @return Froq\Acl\Acl|null
      */
-    final public function getAcl()
+    public function getAcl()
     {
         return $this->acl;
     }
@@ -100,7 +100,7 @@ final class User
      * @param  int|string $id
      * @return self
      */
-    final public function setId($id): self
+    public function setId($id): self
     {
         $this->id = $id;
 
@@ -111,7 +111,7 @@ final class User
      * Get id.
      * @return int|string
      */
-    final public function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -121,7 +121,7 @@ final class User
      * @param  string $name
      * @return self
      */
-    final public function setName(string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -132,7 +132,7 @@ final class User
      * Get name.
      * @return string
      */
-    final public function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -143,7 +143,7 @@ final class User
      * @param  string $role
      * @return self
      */
-    final public function setRole(string $role): self
+    public function setRole(string $role): self
     {
         $this->role = $role;
 
@@ -154,7 +154,7 @@ final class User
      * Get role.
      * @return string|null
      */
-    final public function getRole()
+    public function getRole()
     {
         return $this->role;
     }
@@ -164,7 +164,7 @@ final class User
      * @param  array $permissions
      * @return self
      */
-    final public function setPermissions(array $permissions): self
+    public function setPermissions(array $permissions): self
     {
         $this->permissions = $permissions;
 
@@ -175,7 +175,7 @@ final class User
      * Get permissions.
      * @return array
      */
-    final public function getPermissions(): array
+    public function getPermissions(): array
     {
         return $this->permissions;
     }
@@ -186,7 +186,7 @@ final class User
      * @param  array  $permission
      * @return self
      */
-    final public function setPermissionsOf($uri, array $permission): self
+    public function setPermissionsOf($uri, array $permission): self
     {
         $this->permissions[$uri] = $permission;
 
@@ -198,7 +198,7 @@ final class User
      * @param  string $uri
      * @return array|null
      */
-    final public function getPermissionsOf($uri)
+    public function getPermissionsOf($uri)
     {
         return $this->permissions[$uri] ?? null;
     }
@@ -207,7 +207,7 @@ final class User
      * Is logged in.
      * @return bool
      */
-    final public function isLoggedIn(): bool
+    public function isLoggedIn(): bool
     {
         return $this->id !== null;
     }
@@ -217,7 +217,7 @@ final class User
      * @param  string $uri
      * @return bool
      */
-    final public function hasAccessTo(string $uri): bool
+    public function hasAccessTo(string $uri): bool
     {
         return !!$this->getPermissionsOf($uri);
     }
@@ -227,7 +227,7 @@ final class User
      * @param  string $uri
      * @return bool
      */
-    final public function canRead(string $uri): bool
+    public function canRead(string $uri): bool
     {
         // /book => all
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($this->getUriRoot($uri)))) {
@@ -247,7 +247,7 @@ final class User
      * @param  string $uri
      * @return bool
      */
-    final public function canWrite(string $uri): bool
+    public function canWrite(string $uri): bool
     {
         // /book => all
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($this->getUriRoot($uri)))) {
@@ -269,7 +269,7 @@ final class User
      * @param  bool   $exit
      * @return void
      */
-    final public function redirectIf(string $inOut, string $to = '/', bool $exit = true)
+    public function redirectIf(string $inOut, string $to = '/', bool $exit = true)
     {
         if ($this->acl) {
             $app = $this->acl->getService()->getApp();
@@ -293,7 +293,7 @@ final class User
      * @param  bool $full
      * @return string
      */
-    final public function info(bool $full = false): string
+    public function info(bool $full = false): string
     {
         $return = sprintf('%s: id=%s(%s)', $this->role, $this->id, $this->name);
         if ($full) {
@@ -310,7 +310,7 @@ final class User
      * @param  string $uri
      * @return string
      */
-    final private function getUriRoot(string $uri): string
+    private function getUriRoot(string $uri): string
     {
         $uri .= '/'; // ensure slash
 
