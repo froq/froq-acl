@@ -88,9 +88,9 @@ final class User
 
     /**
      * Get Acl.
-     * @return Froq\Acl\Acl|null
+     * @return ?Froq\Acl\Acl
      */
-    public function getAcl()
+    public function getAcl(): ?Acl
     {
         return $this->acl;
     }
@@ -152,9 +152,9 @@ final class User
 
     /**
      * Get role.
-     * @return string|null
+     * @return ?string
      */
-    public function getRole()
+    public function getRole(): ?string
     {
         return $this->role;
     }
@@ -196,9 +196,9 @@ final class User
     /**
      * Get permission of.
      * @param  string $uri
-     * @return array|null
+     * @return ?array
      */
-    public function getPermissionsOf($uri)
+    public function getPermissionsOf($uri): ?array
     {
         return $this->permissions[$uri] ?? null;
     }

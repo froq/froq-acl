@@ -105,9 +105,9 @@ final class Acl
 
     /**
      * Get user.
-     * @return Froq\Acl\User|null
+     * @return ?Froq\Acl\User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
