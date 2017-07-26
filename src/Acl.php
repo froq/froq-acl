@@ -37,9 +37,9 @@ final class Acl
      * Rules.
      * @const string
      */
-    const RULE_ALL   = 'all',
-          RULE_READ  = 'read',
-          RULE_WRITE = 'write';
+    public const RULE_ALL   = 'all',
+                 RULE_READ  = 'read',
+                 RULE_WRITE = 'write';
 
     /**
      * Service.
