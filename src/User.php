@@ -274,17 +274,20 @@ final class User
         if ($this->acl) {
             $app = $this->acl->getService()->getApp();
             if ($inOut == 'in' && $this->isLoggedIn()) {
-                return $app->response()->redirect($to);
+                $app->response()->redirect($to);
             } elseif ($inOut == 'out' && !$this->isLoggedIn()) {
-                return $app->response()->redirect($to);
+                $app->response()->redirect($to);
             }
-        } elseif (headers_sent($file, $line)) {
-            throw new AclException(sprintf('Cannot use %s, headers was already sent in %s:%s', __method__, $file, $line));
-        }
+        } else {
+            if (headers_sent($file, $line)) {
+                throw new AclException(sprintf('Cannot use %s, headers was already sent in %s:%s',
+                    __method__, $file, $line));
+            }
 
-        header('Location: '. trim($to));
-        if ($exit) {
-            exit;
+            header('Location: '. trim($to));
+            if ($exit) {
+                exit;
+            }
         }
     }
 
