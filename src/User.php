@@ -130,9 +130,9 @@ final class User
 
     /**
      * Get name.
-     * @return string
+     * @return ?string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
