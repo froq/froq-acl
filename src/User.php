@@ -269,7 +269,7 @@ final class User
      * @param  bool   $exit
      * @return void
      */
-    public function redirectIf(string $inOut, string $to = '/', bool $exit = true)
+    public function redirectIf(string $inOut, string $to = '/', bool $exit = true): void
     {
         if ($this->acl) {
             $app = $this->acl->getService()->getApp();
