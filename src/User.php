@@ -112,7 +112,7 @@ final class User
 
     /**
      * Get id.
-     * @return int|string
+     * @return ?int|?string
      */
     public function getId()
     {
@@ -189,7 +189,7 @@ final class User
      * @param  array  $permission
      * @return self
      */
-    public function setPermissionsOf($uri, array $permission): self
+    public function setPermissionsOf(string $uri, array $permission): self
     {
         $this->permissions[$uri] = $permission;
 
@@ -201,7 +201,7 @@ final class User
      * @param  string $uri
      * @return ?array
      */
-    public function getPermissionsOf($uri): ?array
+    public function getPermissionsOf(string $uri): ?array
     {
         return $this->permissions[$uri] ?? null;
     }
@@ -212,7 +212,7 @@ final class User
      */
     public function isLoggedIn(): bool
     {
-        return $this->id !== null;
+        return (null !== $this->id);
     }
 
     /**
@@ -222,7 +222,7 @@ final class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return !!$this->getPermissionsOf($uri);
+        return (null !== $this->getPermissionsOf($uri));
     }
 
     /**
