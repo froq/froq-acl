@@ -93,10 +93,10 @@ final class Acl
         $userRole = $this->user->getRole();
         if ($userRole && !empty($this->rules)) {
             foreach ($this->rules as $role => $rules) {
-                if ($role == $userRole) {
+                if ($userRole == $role) {
                     foreach ($rules as $uri => $rules) {
                         $this->user->setPermissionsOf($uri,
-                            explode(',', $rules) /* 'read,write' etc. */ );
+                            (array) explode(',', $rules) /* 'read,write' etc. */);
                     }
                     break;
                 }

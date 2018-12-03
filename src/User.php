@@ -70,7 +70,7 @@ final class User
      */
     public function __construct(array $info = null)
     {
-        if ($info) {
+        if ($info != null) {
             isset($info['id'])   && $this->setId($info['id']);
             isset($info['name']) && $this->setName($info['name']);
             isset($info['role']) && $this->setRole($info['role']);
@@ -267,18 +267,18 @@ final class User
 
     /**
      * Redirect if.
-     * @param  string $inOut
+     * @param  string $dir In/out direction.
      * @param  string $to
      * @param  bool   $exit
      * @return void
      */
-    public function redirectIf(string $inOut, string $to = '/', bool $exit = true): void
+    public function redirectIf(string $dir, string $to = '/', bool $exit = true): void
     {
-        if ($this->acl) {
+        if ($this->acl != null) {
             $app = $this->acl->getService()->getApp();
-            if ($inOut == 'in' && $this->isLoggedIn()) {
+            if ($dir == 'in' && $this->isLoggedIn()) {
                 $app->response()->redirect($to);
-            } elseif ($inOut == 'out' && !$this->isLoggedIn()) {
+            } elseif ($dir == 'out' && !$this->isLoggedIn()) {
                 $app->response()->redirect($to);
             }
         } else {
@@ -312,7 +312,7 @@ final class User
     }
 
     /**
-     * Get root uri.
+     * Get uri root.
      * @param  string $uri
      * @return string
      */
