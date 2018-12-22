@@ -200,7 +200,7 @@ final class User
      */
     public function isLoggedIn(): bool
     {
-        return (null !== $this->id);
+        return null !== $this->id;
     }
 
     /**
@@ -210,7 +210,7 @@ final class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return (null !== $this->getPermissionsOf($uri));
+        return null !== $this->getPermissionsOf($uri);
     }
 
     /**
