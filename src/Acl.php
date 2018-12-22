@@ -83,27 +83,24 @@ final class Acl
     /**
      * Set user.
      * @param  Froq\Acl\User $user
-     * @return self
+     * @return void
      */
-    public function setUser(User $user): self
+    public function setUser(User $user): void
     {
         $this->user = $user;
         $this->user->setAcl($this);
 
         $userRole = $this->user->getRole();
-        if ($userRole && !empty($this->rules)) {
+        if ($userRole != null && !empty($this->rules)) {
             foreach ($this->rules as $role => $rules) {
                 if ($userRole == $role) {
                     foreach ($rules as $uri => $rules) {
-                        $this->user->setPermissionsOf($uri,
-                            (array) explode(',', $rules) /* 'read,write' etc. */);
+                        $this->user->setPermissionsOf($uri, (array) explode(',', $rules) /* 'read,write' etc. */);
                     }
                     break;
                 }
             }
         }
-
-        return $this;
     }
 
     /**
@@ -118,13 +115,11 @@ final class Acl
     /**
      * Set rules.
      * @param  array $rules
-     * @return self
+     * @return void
      */
-    public function setRules(array $rules): self
+    public function setRules(array $rules): void
     {
         $this->rules = $rules;
-
-        return $this;
     }
 
     /**

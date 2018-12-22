@@ -80,13 +80,11 @@ final class User
     /**
      * Set acl.
      * @param  Froq\Acl\Acl $acl
-     * @return self
+     * @return void
      */
-    public function setAcl(Acl $acl): self
+    public function setAcl(Acl $acl): void
     {
         $this->acl = $acl;
-
-        return $this;
     }
 
     /**
@@ -165,13 +163,11 @@ final class User
     /**
      * Set permissions.
      * @param  array $permissions
-     * @return self
+     * @return void
      */
-    public function setPermissions(array $permissions): self
+    public function setPermissions(array $permissions): void
     {
         $this->permissions = $permissions;
-
-        return $this;
     }
 
     /**
@@ -187,13 +183,11 @@ final class User
      * Set permission of.
      * @param  string $uri
      * @param  array  $permission
-     * @return self
+     * @return void
      */
-    public function setPermissionsOf(string $uri, array $permission): self
+    public function setPermissionsOf(string $uri, array $permission): void
     {
         $this->permissions[$uri] = $permission;
-
-        return $this;
     }
 
     /**
@@ -289,7 +283,7 @@ final class User
 
             header('Location: '. trim($to));
             if ($exit) {
-                exit;
+                exit(0);
             }
         }
     }
