@@ -99,13 +99,11 @@ final class User
     /**
      * Set id.
      * @param  int|string $id
-     * @return self
+     * @return void
      */
-    public function setId($id): self
+    public function setId($id): void
     {
         $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -120,13 +118,11 @@ final class User
     /**
      * Set name.
      * @param  string $name
-     * @return self
+     * @return void
      */
-    public function setName(string $name): self
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -142,13 +138,11 @@ final class User
     /**
      * Set role.
      * @param  string $role
-     * @return self
+     * @return void
      */
-    public function setRole(string $role): self
+    public function setRole(string $role): void
     {
         $this->role = $role;
-
-        return $this;
     }
 
     /**
