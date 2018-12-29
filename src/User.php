@@ -292,7 +292,7 @@ final class User
         $return = sprintf('%s: id=%s(%s)', $this->role, $this->id, $this->name);
         if ($full) {
             foreach ($this->permissions as $uri => $rules) {
-                $return .= sprintf("\n uri(%s %s)", $uri, join(',', $rules));
+                $return .= sprintf("\n uri(%s %s)", $uri, implode(',', $rules));
             }
         }
 
