@@ -271,7 +271,7 @@ final class User
             }
         } else {
             if (headers_sent($file, $line)) {
-                throw new AclException(sprintf('Cannot use %s, headers was already sent in %s:%s',
+                throw new AclException(sprintf("Cannot use '%s()', headers already sent in %s:%s",
                     __method__, $file, $line));
             }
 
