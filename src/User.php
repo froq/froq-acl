@@ -31,6 +31,7 @@ namespace Froq\Acl;
  * @subpackage Froq\Acl
  * @object     Froq\Acl\User
  * @author     Kerem Güneş <k-gun@mail.com>
+ * @since      1.0
  */
 final class User
 {

@@ -33,6 +33,7 @@ use Froq\Service\Service;
  * @subpackage Froq\Acl
  * @object     Froq\Acl\Acl
  * @author     Kerem Güneş <k-gun@mail.com>
+ * @since      1.0
  */
 final class Acl
 {
