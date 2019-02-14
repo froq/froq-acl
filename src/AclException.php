@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace froq\acl;
 
 /**
+ * Acl exception.
  * @package froq\acl
  * @object  froq\acl\AclException
  * @author  Kerem Güneş <k-gun@mail.com>

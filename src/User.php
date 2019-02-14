@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace froq\acl;
 
 /**
+ * User.
  * @package froq\acl
  * @object  froq\acl\User
  * @author  Kerem Güneş <k-gun@mail.com>

@@ -29,6 +29,7 @@ namespace froq\acl;
 use froq\service\Service;
 
 /**
+ * Acl.
  * @package froq\acl
  * @object  froq\acl\Acl
  * @author  Kerem Güneş <k-gun@mail.com>
