@@ -24,20 +24,19 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Acl;
+namespace froq\acl;
 
 /**
- * @package    Froq
- * @subpackage Froq\Acl
- * @object     Froq\Acl\User
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      1.0
+ * @package froq\acl
+ * @object  froq\acl\User
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   1.0
  */
 final class User
 {
     /**
      * Acl.
-     * @var Froq\Acl\Acl.
+     * @var froq\acl\Acl.
      */
     private $acl;
 
@@ -80,7 +79,7 @@ final class User
 
     /**
      * Set acl.
-     * @param  Froq\Acl\Acl $acl
+     * @param  froq\acl\Acl $acl
      * @return void
      */
     public function setAcl(Acl $acl): void
@@ -90,7 +89,7 @@ final class User
 
     /**
      * Get Acl.
-     * @return ?Froq\Acl\Acl
+     * @return ?froq\acl\Acl
      */
     public function getAcl(): ?Acl
     {

@@ -24,14 +24,13 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Acl;
+namespace froq\acl;
 
 /**
- * @package    Froq
- * @subpackage Froq\Acl
- * @object     Froq\Acl\AclException
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      1.0
+ * @package froq\acl
+ * @object  froq\acl\AclException
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   1.0
  */
 final class AclException extends \Exception
 {}

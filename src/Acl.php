@@ -24,16 +24,15 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Acl;
+namespace froq\acl;
 
-use Froq\Service\Service;
+use froq\service\Service;
 
 /**
- * @package    Froq
- * @subpackage Froq\Acl
- * @object     Froq\Acl\Acl
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      1.0
+ * @package froq\acl
+ * @object  froq\acl\Acl
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   1.0
  */
 final class Acl
 {
@@ -47,13 +46,13 @@ final class Acl
 
     /**
      * Service.
-     * @var Froq\Service\Service
+     * @var froq\service\Service
      */
     private $service;
 
     /**
      * User.
-     * @var Froq\Acl\User
+     * @var froq\acl\User
      */
     private $user;
 
@@ -65,7 +64,7 @@ final class Acl
 
     /**
      * Constructor.
-     * @param Froq\Service\Service $service
+     * @param froq\service\Service $service
      */
     public function __construct(Service $service)
     {
@@ -74,7 +73,7 @@ final class Acl
 
     /**
      * Get service.
-     * @return Froq\Service\Service
+     * @return froq\service\Service
      */
     public function getService(): Service
     {
@@ -83,7 +82,7 @@ final class Acl
 
     /**
      * Set user.
-     * @param  Froq\Acl\User $user
+     * @param  froq\acl\User $user
      * @return void
      */
     public function setUser(User $user): void
@@ -106,7 +105,7 @@ final class Acl
 
     /**
      * Get user.
-     * @return ?Froq\Acl\User
+     * @return ?froq\acl\User
      */
     public function getUser(): ?User
     {
