@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
+use froq\exception\Exception;
+
 /**
  * Acl exception.
  * @package froq\acl
@@ -33,5 +35,5 @@ namespace froq\acl;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   1.0
  */
-final class AclException extends \Exception
+final class AclException extends Exception
 {}

@@ -9,6 +9,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "froq/froq-exception": "^1.0",
         "froq/froq-service": "^3.0"
     },
     "autoload": {
