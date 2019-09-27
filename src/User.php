@@ -264,7 +264,7 @@ final class User
     public function redirectIf(string $dir, string $to = '/', bool $exit = true): void
     {
         if ($this->acl != null) {
-            $app = $this->acl->getService()->getApp();
+            $app = $this->acl->getApp();
             if ($dir == 'in' && $this->isLoggedIn()) {
                 $app->response()->redirect($to);
             } elseif ($dir == 'out' && !$this->isLoggedIn()) {

@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
-use froq\service\Service;
+use froq\App;
 
 /**
  * Acl.
@@ -46,10 +46,10 @@ final class Acl
                  RULE_WRITE = 'write';
 
     /**
-     * Service.
-     * @var froq\service\Service
+     * App.
+     * @var froq\App
      */
-    private $service;
+    private $app;
 
     /**
      * User.
@@ -58,27 +58,27 @@ final class Acl
     private $user;
 
     /**
-     * Rules (comes from <FooService>/config['acl.config'] if provided).
+     * Rules (comes from 'acl.config' in <FooService>/config/config.php if provided).
      * @var array
      */
     private $rules = [];
 
     /**
      * Constructor.
-     * @param froq\service\Service $service
+     * @param froq\App $app
      */
-    public function __construct(Service $service)
+    public function __construct(App $app)
     {
-        $this->service = $service;
+        $this->app = $app;
     }
 
     /**
-     * Get service.
-     * @return froq\service\Service
+     * Get app.
+     * @return froq\App
      */
-    public function getService(): Service
+    public function getApp(): App
     {
-        return $this->service;
+        return $this->app;
     }
 
     /**
@@ -92,7 +92,7 @@ final class Acl
         $this->user->setAcl($this);
 
         $userRole = $this->user->getRole();
-        if ($userRole != null && !empty($this->rules)) {
+        if ($userRole != null && $this->rules != null) {
             foreach ($this->rules as $role => $rules) {
                 if ($userRole == $role) {
                     foreach ($rules as $uri => $rules) {
