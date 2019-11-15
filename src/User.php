@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
+use froq\acl\{Acl, AclException};
+
 /**
  * User.
  * @package froq\acl
@@ -39,7 +41,7 @@ final class User
      * Acl.
      * @var froq\acl\Acl.
      */
-    private $acl;
+    private Acl $acl;
 
     /**
      * Id.
@@ -51,31 +53,31 @@ final class User
      * Name.
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * Role.
      * @var string
      */
-    private $role;
+    private string $role;
 
     /**
      * Permissions.
      * @var array
      */
-    private $permissions = [];
+    private array $permissions;
 
     /**
      * Constructor.
-     * @param array|null $info
+     * @param int|string|null $id
+     * @param string|null     $name
+     * @param string|null     $role
      */
-    public function __construct(array $info = null)
+    public function __construct($id = null, string $name = null, string $role = null)
     {
-        if ($info != null) {
-            isset($info['id'])   && $this->setId($info['id']);
-            isset($info['name']) && $this->setName($info['name']);
-            isset($info['role']) && $this->setRole($info['role']);
-        }
+        $id   && $this->setId($id);
+        $name && $this->setName($name);
+        $role && $this->setRole($role);
     }
 
     /**
@@ -94,16 +96,22 @@ final class User
      */
     public function getAcl(): ?Acl
     {
-        return $this->acl;
+        return ($this->acl ?? null);
     }
 
     /**
      * Set id.
      * @param  int|string $id
      * @return void
+     * @throws froq\acl\AclException
      */
     public function setId($id): void
     {
+        if (!is_int($id) && !is_string($id)) {
+            throw new AclException(sprintf('Only int and string IDs are accepted, %s given',
+                gettype($id)));
+        }
+
         $this->id = $id;
     }
 
@@ -113,7 +121,7 @@ final class User
      */
     public function getId()
     {
-        return $this->id;
+        return ($this->id ?? null);
     }
 
     /**
@@ -132,7 +140,7 @@ final class User
      */
     public function getName(): ?string
     {
-        return $this->name;
+        return ($this->name ?? null);
     }
 
 
@@ -152,7 +160,7 @@ final class User
      */
     public function getRole(): ?string
     {
-        return $this->role;
+        return ($this->role ?? null);
     }
 
     /**
@@ -167,11 +175,11 @@ final class User
 
     /**
      * Get permissions.
-     * @return array
+     * @return ?array
      */
-    public function getPermissions(): array
+    public function getPermissions(): ?array
     {
-        return $this->permissions;
+        return ($this->permissions ?? null);
     }
 
     /**
@@ -192,7 +200,7 @@ final class User
      */
     public function getPermissionsOf(string $uri): ?array
     {
-        return $this->permissions[$uri] ?? null;
+        return ($this->getPermissions()[$uri] ?? null);
     }
 
     /**
@@ -201,7 +209,7 @@ final class User
      */
     public function isLoggedIn(): bool
     {
-        return null !== $this->id;
+        return ($this->getId() != null);
     }
 
     /**
@@ -211,7 +219,7 @@ final class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return null !== $this->getPermissionsOf($uri);
+        return ($this->getPermissionsOf($uri) != null);
     }
 
     /**
@@ -222,7 +230,8 @@ final class User
     public function canRead(string $uri): bool
     {
         // /book => all
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($this->getUriRoot($uri)))) {
+        $uriRoot = $this->getUriRoot($uri);
+        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
 
@@ -231,7 +240,7 @@ final class User
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
         });
 
-        return !empty($permission);
+        return ($permission != null);
     }
 
     /**
@@ -242,7 +251,8 @@ final class User
     public function canWrite(string $uri): bool
     {
         // /book => all
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($this->getUriRoot($uri)))) {
+        $uriRoot = $this->getUriRoot($uri);
+        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
 
@@ -251,36 +261,7 @@ final class User
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
         });
 
-        return !empty($permission);
-    }
-
-    /**
-     * Redirect if.
-     * @param  string $dir In/out direction.
-     * @param  string $to
-     * @param  bool   $exit
-     * @return void
-     */
-    public function redirectIf(string $dir, string $to = '/', bool $exit = true): void
-    {
-        if ($this->acl != null) {
-            $app = $this->acl->getApp();
-            if ($dir == 'in' && $this->isLoggedIn()) {
-                $app->response()->redirect($to);
-            } elseif ($dir == 'out' && !$this->isLoggedIn()) {
-                $app->response()->redirect($to);
-            }
-        } else {
-            if (headers_sent($file, $line)) {
-                throw new AclException(sprintf("Cannot use '%s()', headers already sent in %s:%s",
-                    __method__, $file, $line));
-            }
-
-            header('Location: '. trim($to));
-            if ($exit) {
-                exit(0);
-            }
-        }
+        return ($permission != null);
     }
 
     /**
@@ -290,14 +271,15 @@ final class User
      */
     public function info(bool $full = false): string
     {
-        $return = sprintf('%s: id=%s(%s)', $this->role, $this->id, $this->name);
+        $ret = sprintf('%s: id=%s(%s)', $this->getRole(), $this->getId(), $this->getName());
+
         if ($full) {
-            foreach ($this->permissions as $uri => $rules) {
-                $return .= sprintf("\n uri(%s %s)", $uri, implode(',', $rules));
+            foreach ((array) $this->getPermissions() as $uri => $rules) {
+                $ret .= sprintf("\n uri(%s %s)", $uri, implode(',', $rules));
             }
         }
 
-        return $return;
+        return $ret;
     }
 
     /**

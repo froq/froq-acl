@@ -26,12 +26,14 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
+use froq\core\throwables\Exception;
+
 /**
- * Acl exception.
+ * Acl Exception.
  * @package froq\acl
  * @object  froq\acl\AclException
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   1.0
  */
-final class AclException extends \Exception
+final class AclException extends Exception
 {}

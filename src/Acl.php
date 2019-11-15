@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
-use froq\App;
+use froq\acl\User;
 
 /**
  * Acl.
@@ -46,39 +46,24 @@ final class Acl
                  RULE_WRITE = 'write';
 
     /**
-     * App.
-     * @var froq\App
-     */
-    private $app;
-
-    /**
      * User.
      * @var froq\acl\User
      */
-    private $user;
+    private User $user;
 
     /**
      * Rules (comes from 'acl.config' in <FooService>/config/config.php if provided).
      * @var array
      */
-    private $rules = [];
+    private array $rules;
 
     /**
      * Constructor.
-     * @param froq\App $app
+     * @param froq\acl\User|null $user
      */
-    public function __construct(App $app)
+    public function __construct(User $user = null)
     {
-        $this->app = $app;
-    }
-
-    /**
-     * Get app.
-     * @return froq\App
-     */
-    public function getApp(): App
-    {
-        return $this->app;
+        $user && $this->setUser($user);
     }
 
     /**
@@ -92,11 +77,12 @@ final class Acl
         $this->user->setAcl($this);
 
         $userRole = $this->user->getRole();
-        if ($userRole != null && $this->rules != null) {
-            foreach ($this->rules as $role => $rules) {
+        if ($userRole != null) {
+            foreach ((array) $this->getRules() as $role => $rules) {
                 if ($userRole == $role) {
                     foreach ($rules as $uri => $rules) {
-                        $this->user->setPermissionsOf($uri, (array) explode(',', $rules) /* 'read,write' etc. */);
+                        $this->user->setPermissionsOf($uri,
+                            (array) explode(',', $rules) /* 'read,write' etc. */);
                     }
                     break;
                 }
@@ -110,7 +96,7 @@ final class Acl
      */
     public function getUser(): ?User
     {
-        return $this->user;
+        return ($this->user ?? null);
     }
 
     /**
@@ -125,10 +111,10 @@ final class Acl
 
     /**
      * Get rules.
-     * @return array
+     * @return ?array
      */
-    public function getRules(): array
+    public function getRules(): ?array
     {
-        return $this->rules;
+        return ($this->rules ?? null);
     }
 }
