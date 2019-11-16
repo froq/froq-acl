@@ -1,7 +1,7 @@
 {
     "name": "froq/froq-acl",
     "homepage": "https://github.com/froq/froq-acl",
-    "description": "ACL module for Froq!",
+    "description": "Froq! Acl.",
     "keywords": ["froq", "acl"],
     "license": "MIT",
     "authors": [
@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": "^7.4",
-        "froq/froq-core": "^4.0"
+        "froq/froq": "^4.0"
     },
     "autoload": {
         "classmap": ["src/"]
