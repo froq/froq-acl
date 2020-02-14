@@ -108,8 +108,8 @@ final class User
     public function setId($id): void
     {
         if (!is_int($id) && !is_string($id)) {
-            throw new AclException(sprintf('Only int and string IDs are accepted, %s given',
-                gettype($id)));
+            throw new AclException('Only int and string IDs are accepted, %s given',
+                [gettype($id)]);
         }
 
         $this->id = $id;
