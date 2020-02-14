@@ -46,24 +46,45 @@ final class Acl
                  RULE_WRITE = 'write';
 
     /**
+     * Rules.
+     * @var array<string, array<string, string>>
+     */
+    private array $rules;
+
+    /**
      * User.
      * @var froq\acl\User
      */
     private User $user;
 
     /**
-     * Rules (comes from 'acl.config' in <FooService>/config/config.php if provided).
-     * @var array
+     * Constructor.
+     * @param array<string, array<string, string>>|null $rules
+     * @param froq\acl\User|null                        $user
      */
-    private array $rules;
+    public function __construct(array $rules = null, User $user = null)
+    {
+        $rules && $this->setRules($rules);
+        $user  && $this->setUser($user);
+    }
 
     /**
-     * Constructor.
-     * @param froq\acl\User|null $user
+     * Set rules.
+     * @param  array<string, array<string, string>> $rules
+     * @return void
      */
-    public function __construct(User $user = null)
+    public function setRules(array $rules): void
     {
-        $user && $this->setUser($user);
+        $this->rules = $rules;
+    }
+
+    /**
+     * Get rules.
+     * @return ?array<string, array<string, string>>
+     */
+    public function getRules(): ?array
+    {
+        return $this->rules ?? null;
     }
 
     /**
@@ -79,10 +100,10 @@ final class Acl
         $userRole = $this->user->getRole();
         if ($userRole != null) {
             foreach ((array) $this->getRules() as $role => $rules) {
-                if ($userRole == $role) {
-                    foreach ($rules as $uri => $rules) {
-                        $this->user->setPermissionsOf($uri,
-                            (array) explode(',', $rules) /* 'read,write' etc. */);
+                if ($userRole == $role) { // Eg: "user" or "admin".
+                    foreach ($rules as $uri => $permission) { // Eg: ["/book" => "read"].
+                        $permission = (array) explode(',', $permission); // Eg: "read" or "read,write".
+                        $this->user->setPermissionsOf($uri, $permission);
                     }
                     break;
                 }
@@ -96,25 +117,6 @@ final class Acl
      */
     public function getUser(): ?User
     {
-        return ($this->user ?? null);
-    }
-
-    /**
-     * Set rules.
-     * @param  array $rules
-     * @return void
-     */
-    public function setRules(array $rules): void
-    {
-        $this->rules = $rules;
-    }
-
-    /**
-     * Get rules.
-     * @return ?array
-     */
-    public function getRules(): ?array
-    {
-        return ($this->rules ?? null);
+        return $this->user ?? null;
     }
 }

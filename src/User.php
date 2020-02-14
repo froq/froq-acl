@@ -96,7 +96,7 @@ final class User
      */
     public function getAcl(): ?Acl
     {
-        return ($this->acl ?? null);
+        return $this->acl ?? null;
     }
 
     /**
@@ -121,7 +121,7 @@ final class User
      */
     public function getId()
     {
-        return ($this->id ?? null);
+        return $this->id ?? null;
     }
 
     /**
@@ -140,7 +140,7 @@ final class User
      */
     public function getName(): ?string
     {
-        return ($this->name ?? null);
+        return $this->name ?? null;
     }
 
 
@@ -160,7 +160,7 @@ final class User
      */
     public function getRole(): ?string
     {
-        return ($this->role ?? null);
+        return $this->role ?? null;
     }
 
     /**
@@ -179,7 +179,7 @@ final class User
      */
     public function getPermissions(): ?array
     {
-        return ($this->permissions ?? null);
+        return $this->permissions ?? null;
     }
 
     /**
@@ -200,7 +200,7 @@ final class User
      */
     public function getPermissionsOf(string $uri): ?array
     {
-        return ($this->getPermissions()[$uri] ?? null);
+        return $this->getPermissions()[$uri] ?? null;
     }
 
     /**
@@ -209,7 +209,7 @@ final class User
      */
     public function isLoggedIn(): bool
     {
-        return ($this->getId() != null);
+        return !empty($this->getId());
     }
 
     /**
@@ -219,7 +219,7 @@ final class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return ($this->getPermissionsOf($uri) != null);
+        return !empty($this->getPermissionsOf($uri));
     }
 
     /**
@@ -229,18 +229,18 @@ final class User
      */
     public function canRead(string $uri): bool
     {
-        // /book => all
+        // Eg: ["/book" => "all"].
         $uriRoot = $this->getUriRoot($uri);
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
 
-        // /book/detail => all or read
-        $permission = array_filter((array) $this->getPermissionsOf($uri), function($rule) {
+        // Eg: ["/book/detail" => "all" or "read"].
+        $permission = array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
         });
 
-        return ($permission != null);
+        return !empty($permission);
     }
 
     /**
@@ -250,18 +250,18 @@ final class User
      */
     public function canWrite(string $uri): bool
     {
-        // /book => all
+        // Eg: ["/book" => "all"].
         $uriRoot = $this->getUriRoot($uri);
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
 
-        // /book/detail => all or write
-        $permission = array_filter((array) $this->getPermissionsOf($uri), function($rule) {
+        // Eg: ["/book/detail" => "all" or "write"].
+        $permission = array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
         });
 
-        return ($permission != null);
+        return !empty($permission);
     }
 
     /**
@@ -289,7 +289,8 @@ final class User
      */
     private function getUriRoot(string $uri): string
     {
-        $uri .= '/'; // ensure slash
+        // Ensure slash for strpos().
+        $uri .= '/';
 
         return substr($uri, 0, strpos($uri, '/', 1));
     }

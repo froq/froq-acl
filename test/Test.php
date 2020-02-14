@@ -14,7 +14,7 @@ class Test extends TestCase
 {
     function test_nullUser() {
         $this->assertNull((new Acl)->getUser());
-        $this->assertNotNull((new Acl(new User))->getUser());
+        $this->assertNotNull((new Acl([], new User))->getUser());
     }
 
     function test_userId() {
