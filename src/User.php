@@ -83,11 +83,13 @@ final class User
     /**
      * Set acl.
      * @param  froq\acl\Acl $acl
-     * @return void
+     * @return self
      */
-    public function setAcl(Acl $acl): void
+    public function setAcl(Acl $acl): self
     {
         $this->acl = $acl;
+
+        return $this;
     }
 
     /**
@@ -96,16 +98,16 @@ final class User
      */
     public function getAcl(): ?Acl
     {
-        return ($this->acl ?? null);
+        return $this->acl ?? null;
     }
 
     /**
      * Set id.
      * @param  int|string $id
-     * @return void
+     * @return self
      * @throws froq\acl\AclException
      */
-    public function setId($id): void
+    public function setId($id): self
     {
         if (!is_int($id) && !is_string($id)) {
             throw new AclException(sprintf('Only int and string IDs are accepted, %s given',
@@ -113,6 +115,8 @@ final class User
         }
 
         $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -121,17 +125,19 @@ final class User
      */
     public function getId()
     {
-        return ($this->id ?? null);
+        return $this->id ?? null;
     }
 
     /**
      * Set name.
      * @param  string $name
-     * @return void
+     * @return self
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -140,18 +146,20 @@ final class User
      */
     public function getName(): ?string
     {
-        return ($this->name ?? null);
+        return $this->name ?? null;
     }
 
 
     /**
      * Set role.
      * @param  string $role
-     * @return void
+     * @return self
      */
-    public function setRole(string $role): void
+    public function setRole(string $role): self
     {
         $this->role = $role;
+
+        return $this;
     }
 
     /**
@@ -160,17 +168,19 @@ final class User
      */
     public function getRole(): ?string
     {
-        return ($this->role ?? null);
+        return $this->role ?? null;
     }
 
     /**
      * Set permissions.
      * @param  array $permissions
-     * @return void
+     * @return self
      */
-    public function setPermissions(array $permissions): void
+    public function setPermissions(array $permissions): self
     {
         $this->permissions = $permissions;
+
+        return $this;
     }
 
     /**
@@ -179,18 +189,20 @@ final class User
      */
     public function getPermissions(): ?array
     {
-        return ($this->permissions ?? null);
+        return $this->permissions ?? null;
     }
 
     /**
      * Set permission of.
      * @param  string $uri
      * @param  array  $permission
-     * @return void
+     * @return self
      */
-    public function setPermissionsOf(string $uri, array $permission): void
+    public function setPermissionsOf(string $uri, array $permission): self
     {
         $this->permissions[$uri] = $permission;
+
+        return $this;
     }
 
     /**
@@ -200,7 +212,7 @@ final class User
      */
     public function getPermissionsOf(string $uri): ?array
     {
-        return ($this->getPermissions()[$uri] ?? null);
+        return $this->getPermissions()[$uri] ?? null;
     }
 
     /**
@@ -209,7 +221,7 @@ final class User
      */
     public function isLoggedIn(): bool
     {
-        return ($this->getId() != null);
+        return $this->getId() != null;
     }
 
     /**
@@ -219,7 +231,7 @@ final class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return ($this->getPermissionsOf($uri) != null);
+        return $this->getPermissionsOf($uri) != null;
     }
 
     /**
@@ -240,7 +252,7 @@ final class User
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
         });
 
-        return ($permission != null);
+        return $permission != null;
     }
 
     /**
@@ -261,7 +273,7 @@ final class User
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
         });
 
-        return ($permission != null);
+        return $permission != null;
     }
 
     /**

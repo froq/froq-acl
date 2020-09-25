@@ -52,18 +52,20 @@ final class Acl
     private User $user;
 
     /**
-     * Rules (comes from 'acl.config' in <FooService>/config/config.php if provided).
-     * @var array
+     * Rules.
+     * @var array<string, array<string>>
      */
     private array $rules;
 
     /**
      * Constructor.
-     * @param froq\acl\User|null $user
+     * @param froq\acl\User|null                $user
+     * @param array<string, array<string>>|null $rules
      */
-    public function __construct(User $user = null)
+    public function __construct(User $user = null, array $rules = null)
     {
-        $user && $this->setUser($user);
+        $user  && $this->setUser($user);
+        $rules && $this->setRules($rules);
     }
 
     /**
@@ -79,10 +81,10 @@ final class Acl
         $userRole = $this->user->getRole();
         if ($userRole != null) {
             foreach ((array) $this->getRules() as $role => $rules) {
-                if ($userRole == $role) {
-                    foreach ($rules as $uri => $rules) {
-                        $this->user->setPermissionsOf($uri,
-                            (array) explode(',', $rules) /* 'read,write' etc. */);
+                if ($userRole == $role) { // Eg: "user" or "admin".
+                    foreach ($rules as $uri => $permission) { // Eg: ["/book" => "read"].
+                        $permission = (array) explode(',', $permission); // Eg: "read" or "read,write".
+                        $this->user->setPermissionsOf($uri, $permission);
                     }
                     break;
                 }
@@ -96,12 +98,12 @@ final class Acl
      */
     public function getUser(): ?User
     {
-        return ($this->user ?? null);
+        return $this->user ?? null;
     }
 
     /**
      * Set rules.
-     * @param  array $rules
+     * @param  array<string, array<string>> $rules
      * @return void
      */
     public function setRules(array $rules): void
@@ -111,10 +113,10 @@ final class Acl
 
     /**
      * Get rules.
-     * @return ?array
+     * @return ?array<string, array<string>>
      */
     public function getRules(): ?array
     {
-        return ($this->rules ?? null);
+        return $this->rules ?? null;
     }
 }
