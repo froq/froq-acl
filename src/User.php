@@ -236,7 +236,7 @@ final class User
         }
 
         // /book/detail => all or read
-        $permission = array_filter((array) $this->getPermissionsOf($uri), function($rule) {
+        $permission = array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
         });
 
@@ -257,7 +257,7 @@ final class User
         }
 
         // /book/detail => all or write
-        $permission = array_filter((array) $this->getPermissionsOf($uri), function($rule) {
+        $permission = array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
         });
 
