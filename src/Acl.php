@@ -64,7 +64,7 @@ final class Acl
      */
     public function __construct(User $user = null, array $rules = null)
     {
-        $user  && $this->setUser($user);
+        $user && $this->setUser($user);
         $rules && $this->setRules($rules);
     }
 

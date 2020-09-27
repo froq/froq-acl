@@ -64,8 +64,8 @@ class Test extends TestCase
         $user1 = new User(1, 'Doe');
         $user2 = new User(2, 'Foe');
 
-        $user1->setPermissionsOf('/posts', ['read', 'write']);
         // $user1->setPermissionsOf('/posts', ['all']); // Or.
+        $user1->setPermissionsOf('/posts', ['read', 'write']);
         $user2->setPermissionsOf('/posts', []);
 
         $this->assertTrue($user1->canRead('/posts') or $user1->canWrite('/posts'));

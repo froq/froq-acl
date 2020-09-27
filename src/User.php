@@ -72,12 +72,15 @@ final class User
      * @param int|string|null $id
      * @param string|null     $name
      * @param string|null     $role
+     * @param array|null      $permissions
      */
-    public function __construct($id = null, string $name = null, string $role = null)
+    public function __construct($id = null, string $name = null, string $role = null,
+        array $permissions = null)
     {
-        $id   && $this->setId($id);
+        $id  && $this->setId($id);
         $name && $this->setName($name);
         $role && $this->setRole($role);
+        $permissions && $this->setPermissions($permissions);
     }
 
     /**
@@ -193,26 +196,26 @@ final class User
     }
 
     /**
-     * Set permission of.
+     * Set permissions of.
      * @param  string $uri
-     * @param  array  $permission
+     * @param  array  $rules
      * @return self
      */
-    public function setPermissionsOf(string $uri, array $permission): self
+    public function setPermissionsOf(string $uri, array $rules): self
     {
-        $this->permissions[$uri] = $permission;
+        $this->permissions[$uri] = $rules;
 
         return $this;
     }
 
     /**
-     * Get permission of.
+     * Get permissions of.
      * @param  string $uri
      * @return ?array
      */
     public function getPermissionsOf(string $uri): ?array
     {
-        return $this->getPermissions()[$uri] ?? null;
+        return $this->permissions[$uri] ?? null;
     }
 
     /**
@@ -248,11 +251,9 @@ final class User
         }
 
         // /book/detail => all or read
-        $permission = array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
+        return !!array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
         });
-
-        return $permission != null;
     }
 
     /**
@@ -269,11 +270,9 @@ final class User
         }
 
         // /book/detail => all or write
-        $permission = array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
+        return !!array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
             return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
         });
-
-        return $permission != null;
     }
 
     /**
