@@ -12,6 +12,9 @@ use froq\acl\User;
 /**
  * Acl.
  *
+ * Represents an ACL entity which holds its user and provides an ability to run ACL related routines with that
+ * user interface.
+ *
  * @package froq\acl
  * @object  froq\acl\Acl
  * @author  Kerem Güneş <k-gun@mail.com>
@@ -27,35 +30,31 @@ final class Acl
                  RULE_READ  = 'read',
                  RULE_WRITE = 'write';
 
-    /**
-     * User.
-     * @var froq\acl\User
-     */
+    /** @var froq\acl\User */
     private User $user;
 
-    /**
-     * Rules.
-     * @var array<string, array<string>>
-     */
+    /** @var array */
     private array $rules;
 
     /**
      * Constructor.
-     * @param froq\acl\User|null                $user
-     * @param array<string, array<string>>|null $rules
+     *
+     * @param froq\acl\User|null $user
+     * @param array|null         $rules
      */
     public function __construct(User $user = null, array $rules = null)
     {
-        $user && $this->setUser($user);
+        $user  && $this->setUser($user);
         $rules && $this->setRules($rules);
     }
 
     /**
-     * Set user.
+     * Set ACL user.
+     *
      * @param  froq\acl\User $user
-     * @return void
+     * @return self
      */
-    public function setUser(User $user): void
+    public function setUser(User $user): self
     {
         $this->user = $user;
         $this->user->setAcl($this);
@@ -72,32 +71,39 @@ final class Acl
                 }
             }
         }
+
+        return $this;
     }
 
     /**
-     * Get user.
-     * @return ?froq\acl\User
+     * Get ACL user.
+     *
+     * @return froq\acl\User|null
      */
-    public function getUser(): ?User
+    public function getUser(): User|null
     {
         return $this->user ?? null;
     }
 
     /**
-     * Set rules.
-     * @param  array<string, array<string>> $rules
-     * @return void
+     * Set ACL user rules.
+     *
+     * @param  array $rules
+     * @return self
      */
-    public function setRules(array $rules): void
+    public function setRules(array $rules): self
     {
         $this->rules = $rules;
+
+        return $this;
     }
 
     /**
-     * Get rules.
-     * @return ?array<string, array<string>>
+     * Get ACL user rules.
+     *
+     * @return array|null
      */
-    public function getRules(): ?array
+    public function getRules(): array|null
     {
         return $this->rules ?? null;
     }

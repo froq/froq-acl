@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
-use froq\acl\{Acl, AclException};
+use froq\acl\Acl;
 
 /**
  * User.
+ *
+ * Represents an user entity which holds its ACL with rules and provides an ability to run ACL related routines.
  *
  * @package froq\acl
  * @object  froq\acl\User
@@ -19,54 +21,41 @@ use froq\acl\{Acl, AclException};
  */
 final class User
 {
-    /**
-     * Acl.
-     * @var froq\acl\Acl.
-     */
+    /** @var froq\acl\Acl */
     private Acl $acl;
 
-    /**
-     * Id.
-     * @var int|string
-     */
-    private $id;
+    /** @var int|string */
+    private int|string $id;
 
-    /**
-     * Name.
-     * @var string
-     */
+    /** @var string */
     private string $name;
 
-    /**
-     * Role.
-     * @var string
-     */
+    /** @var string */
     private string $role;
 
-    /**
-     * Permissions.
-     * @var array
-     */
+    /** @var array */
     private array $permissions;
 
     /**
      * Constructor.
+     *
      * @param int|string|null $id
      * @param string|null     $name
      * @param string|null     $role
      * @param array|null      $permissions
      */
-    public function __construct($id = null, string $name = null, string $role = null,
+    public function __construct(int|string $id = null, string $name = null, string $role = null,
         array $permissions = null)
     {
-        $id  && $this->setId($id);
-        $name && $this->setName($name);
-        $role && $this->setRole($role);
+        $id          && $this->setId($id);
+        $name        && $this->setName($name);
+        $role        && $this->setRole($role);
         $permissions && $this->setPermissions($permissions);
     }
 
     /**
-     * Set acl.
+     * Set ACL property.
+     *
      * @param  froq\acl\Acl $acl
      * @return self
      */
@@ -78,27 +67,23 @@ final class User
     }
 
     /**
-     * Get Acl.
-     * @return ?froq\acl\Acl
+     * Get ACL property.
+     *
+     * @return froq\acl\Acl|null
      */
-    public function getAcl(): ?Acl
+    public function getAcl(): Acl|null
     {
         return $this->acl ?? null;
     }
 
     /**
      * Set id.
+     *
      * @param  int|string $id
      * @return self
-     * @throws froq\acl\AclException
      */
-    public function setId($id): self
+    public function setId(int|string $id): self
     {
-        if (!is_int($id) && !is_string($id)) {
-            throw new AclException(sprintf("Only int and string IDs are accepted, '%s' given",
-                gettype($id)));
-        }
-
         $this->id = $id;
 
         return $this;
@@ -106,15 +91,17 @@ final class User
 
     /**
      * Get id.
-     * @return ?int|?string
+     *
+     * @return int|string|null
      */
-    public function getId()
+    public function getId(): int|string|null
     {
         return $this->id ?? null;
     }
 
     /**
      * Set name.
+     *
      * @param  string $name
      * @return self
      */
@@ -127,9 +114,10 @@ final class User
 
     /**
      * Get name.
-     * @return ?string
+     *
+     * @return string|null
      */
-    public function getName(): ?string
+    public function getName(): string|null
     {
         return $this->name ?? null;
     }
@@ -137,6 +125,7 @@ final class User
 
     /**
      * Set role.
+     *
      * @param  string $role
      * @return self
      */
@@ -149,15 +138,16 @@ final class User
 
     /**
      * Get role.
-     * @return ?string
+     * @return string|null
      */
-    public function getRole(): ?string
+    public function getRole(): string|null
     {
         return $this->role ?? null;
     }
 
     /**
      * Set permissions.
+     *
      * @param  array $permissions
      * @return self
      */
@@ -170,15 +160,17 @@ final class User
 
     /**
      * Get permissions.
-     * @return ?array
+     *
+     * @return array|null
      */
-    public function getPermissions(): ?array
+    public function getPermissions(): array|null
     {
         return $this->permissions ?? null;
     }
 
     /**
      * Set permissions of.
+     *
      * @param  string $uri
      * @param  array  $rules
      * @return self
@@ -192,16 +184,18 @@ final class User
 
     /**
      * Get permissions of.
+     *
      * @param  string $uri
-     * @return ?array
+     * @return array|null
      */
-    public function getPermissionsOf(string $uri): ?array
+    public function getPermissionsOf(string $uri): array|null
     {
         return $this->permissions[$uri] ?? null;
     }
 
     /**
-     * Is logged in.
+     * Check logged-in state by id existence.
+     *
      * @return bool
      */
     public function isLoggedIn(): bool
@@ -210,7 +204,8 @@ final class User
     }
 
     /**
-     * Has access to.
+     * Check has-access-to state for an URI path.
+     *
      * @param  string $uri
      * @return bool
      */
@@ -220,45 +215,46 @@ final class User
     }
 
     /**
-     * Can read.
+     * Check can-read state by given URI path.
+     *
      * @param  string $uri
      * @return bool
      */
     public function canRead(string $uri): bool
     {
-        // /book => all
+        // Eg: /book => all.
         $uriRoot = $this->getUriRoot($uri);
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
 
-        // /book/detail => all or read
-        return !!array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
-            return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
-        });
+        // Eg: /book/detail => all or read.
+        return !!array_filter((array) $this->getPermissionsOf($uri),
+            fn() => $rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
     }
 
     /**
-     * Can write.
+     * Check can-write state by given URI path.
+     *
      * @param  string $uri
      * @return bool
      */
     public function canWrite(string $uri): bool
     {
-        // /book => all
+        // Eg: /book => all.
         $uriRoot = $this->getUriRoot($uri);
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
 
-        // /book/detail => all or write
-        return !!array_filter((array) $this->getPermissionsOf($uri), function ($rule) {
-            return ($rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
-        });
+        // Eg: /book/detail => all or write.
+        return !!array_filter((array) $this->getPermissionsOf($uri),
+            fn() => $rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
     }
 
     /**
-     * Info.
+     * Get user info.
+     *
      * @param  bool $full
      * @return string
      */
@@ -276,13 +272,14 @@ final class User
     }
 
     /**
-     * Get uri root.
+     * Get URI root.
+     *
      * @param  string $uri
      * @return string
      */
     private function getUriRoot(string $uri): string
     {
-        $uri .= '/'; // ensure slash
+        $uri .= '/'; // Ensure slash.
 
         return substr($uri, 0, strpos($uri, '/', 1));
     }
