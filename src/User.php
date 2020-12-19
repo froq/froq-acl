@@ -223,7 +223,7 @@ final class User
     public function canRead(string $uri): bool
     {
         // Eg: /book => all.
-        $uriRoot = $this->getUriRoot($uri);
+        $uriRoot = $this->extractUriRoot($uri);
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
@@ -242,7 +242,7 @@ final class User
     public function canWrite(string $uri): bool
     {
         // Eg: /book => all.
-        $uriRoot = $this->getUriRoot($uri);
+        $uriRoot = $this->extractUriRoot($uri);
         if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
             return true;
         }
@@ -264,7 +264,7 @@ final class User
 
         if ($full) {
             foreach ((array) $this->getPermissions() as $uri => $rules) {
-                $ret .= sprintf("\n uri(%s %s)", $uri, implode(',', $rules));
+                $ret .= sprintf("\n uri(%s %s)", $uri, join(',', $rules));
             }
         }
 
@@ -272,12 +272,12 @@ final class User
     }
 
     /**
-     * Get URI root.
+     * Extract root of given URI.
      *
      * @param  string $uri
      * @return string
      */
-    private function getUriRoot(string $uri): string
+    private function extractUriRoot(string $uri): string
     {
         $uri .= '/'; // Ensure slash.
 
