@@ -5,7 +5,7 @@
  */
 namespace froq\acl\test;
 
-require __dir__ .'/../../../../vendor/autoload.php';
+require __dir__ . '/../../../../vendor/autoload.php';
 
 use froq\acl\{Acl, User};
 use PHPUnit\Framework\TestCase;

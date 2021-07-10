@@ -1,26 +1,7 @@
 <?php
 /**
- * MIT License <https://opensource.org/licenses/mit>
- *
- * Copyright (c) 2015 Kerem Güneş
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is furnished
- * to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Copyright (c) 2015 · Kerem Güneş
+ * Apache License 2.0 · http://github.com/froq/froq-acl
  */
 declare(strict_types=1);
 
@@ -30,9 +11,13 @@ use froq\acl\User;
 
 /**
  * Acl.
+ *
+ * Represents an ACL entity which holds its user and provides an ability to run ACL related routines with that
+ * user interface.
+ *
  * @package froq\acl
  * @object  froq\acl\Acl
- * @author  Kerem Güneş <k-gun@mail.com>
+ * @author  Kerem Güneş
  * @since   1.0
  */
 final class Acl
@@ -45,35 +30,31 @@ final class Acl
                  RULE_READ  = 'read',
                  RULE_WRITE = 'write';
 
-    /**
-     * User.
-     * @var froq\acl\User
-     */
+    /** @var froq\acl\User */
     private User $user;
 
-    /**
-     * Rules.
-     * @var array<string, array<string>>
-     */
+    /** @var array */
     private array $rules;
 
     /**
      * Constructor.
-     * @param froq\acl\User|null                $user
-     * @param array<string, array<string>>|null $rules
+     *
+     * @param froq\acl\User|null $user
+     * @param array|null         $rules
      */
     public function __construct(User $user = null, array $rules = null)
     {
-        $user && $this->setUser($user);
+        $user  && $this->setUser($user);
         $rules && $this->setRules($rules);
     }
 
     /**
-     * Set user.
+     * Set ACL user.
+     *
      * @param  froq\acl\User $user
-     * @return void
+     * @return self
      */
-    public function setUser(User $user): void
+    public function setUser(User $user): self
     {
         $this->user = $user;
         $this->user->setAcl($this);
@@ -90,32 +71,39 @@ final class Acl
                 }
             }
         }
+
+        return $this;
     }
 
     /**
-     * Get user.
-     * @return ?froq\acl\User
+     * Get ACL user.
+     *
+     * @return froq\acl\User|null
      */
-    public function getUser(): ?User
+    public function getUser(): User|null
     {
         return $this->user ?? null;
     }
 
     /**
-     * Set rules.
-     * @param  array<string, array<string>> $rules
-     * @return void
+     * Set ACL user rules.
+     *
+     * @param  array $rules
+     * @return self
      */
-    public function setRules(array $rules): void
+    public function setRules(array $rules): self
     {
         $this->rules = $rules;
+
+        return $this;
     }
 
     /**
-     * Get rules.
-     * @return ?array<string, array<string>>
+     * Get ACL user rules.
+     *
+     * @return array|null
      */
-    public function getRules(): ?array
+    public function getRules(): array|null
     {
         return $this->rules ?? null;
     }
