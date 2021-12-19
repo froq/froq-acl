@@ -230,7 +230,7 @@ final class User
 
         // Eg: /book/detail => all or read.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn() => $rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
+            fn($rule) => $rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
     }
 
     /**
@@ -249,7 +249,7 @@ final class User
 
         // Eg: /book/detail => all or write.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn() => $rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
+            fn($rule) => $rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
     }
 
     /**
