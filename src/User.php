@@ -222,7 +222,7 @@ final class User
     {
         // Eg: /book => all.
         $uriRoot = $this->extractUriRoot($uri);
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
+        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
             return true;
         }
 
@@ -241,7 +241,7 @@ final class User
     {
         // Eg: /book => all.
         $uriRoot = $this->extractUriRoot($uri);
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
+        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
             return true;
         }
 
