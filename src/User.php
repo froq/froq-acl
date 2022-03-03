@@ -10,7 +10,7 @@ namespace froq\acl;
 /**
  * User.
  *
- * Represents an user entity which holds its ACL with rules and provides an ability to run ACL related routines.
+ * A class, defines its ACL with rules and provides an ability to run ACL related routines.
  *
  * @package froq\acl
  * @object  froq\acl\User
