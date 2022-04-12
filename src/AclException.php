@@ -7,15 +7,11 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
-use froq\common\Exception;
-
 /**
- * Acl Exception.
- *
  * @package froq\acl
  * @object  froq\acl\AclException
  * @author  Kerem Güneş
  * @since   1.0
  */
-class AclException extends Exception
+class AclException extends \froq\common\Exception
 {}

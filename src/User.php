@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace froq\acl;
 
 /**
- * User.
- *
  * A class, defines its ACL with rules and provides an ability to run ACL related routines.
  *
  * @package froq\acl
