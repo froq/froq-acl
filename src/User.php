@@ -165,7 +165,9 @@ class User
      */
     public function setPermissions(array $permissions): self
     {
-        $this->permissions = $permissions;
+        foreach ($permissions as $uri => $rules) {
+            $this->setPermissionsOf($uri, $rules);
+        }
 
         return $this;
     }
@@ -183,12 +185,15 @@ class User
     /**
      * Set permissions of.
      *
-     * @param  string $uri
-     * @param  array  $rules
+     * @param  string       $uri
+     * @param  string|array $rules
      * @return self
      */
-    public function setPermissionsOf(string $uri, array $rules): self
+    public function setPermissionsOf(string $uri, string|array $rules): self
     {
+        // Eg: "read" or "read,write".
+        is_string($rules) && $rules = explode(',', $rules);
+
         $this->permissions[$uri] = $rules;
 
         return $this;

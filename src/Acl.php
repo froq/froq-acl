@@ -49,10 +49,9 @@ class Acl
                 // Eg: "user" or "admin".
                 if ($userRole == $role) {
                     // Eg: ["/book" => "read"].
-                    foreach ($rules as $uri => $permission) {
+                    foreach ($rules as $uri => $rule) {
                         // Eg: "read" or "read,write".
-                        $permission = explode(',', $permission);
-                        $user->setPermissionsOf($uri, $permission);
+                        $user->setPermissionsTo($uri, $rule);
                     }
                     break;
                 }
