@@ -55,7 +55,14 @@ class User
         $name        && $this->setName($name);
         $role        && $this->setRole($role);
         $permissions && $this->setPermissions($permissions);
-        $data        && $this->setData($data);
+
+        if ($data) {
+            $this->setData($data);
+
+            // Add spesific fields.
+            isset($data['id'])   && $this->setId($data['id']);
+            isset($data['name']) && $this->setName($data['name']);
+        }
     }
 
     /**
@@ -265,7 +272,12 @@ class User
      */
     public function info(bool $full = false): string
     {
-        $ret = sprintf('%s: id=%s(%s)', $this->getRole(), $this->getId(), $this->getName());
+        $ret = sprintf(
+            '%s: id=%s(%s)',
+            $this->getRole() ?? '?',
+            $this->getId()   ?? '?',
+            $this->getName() ?? '?'
+        );
 
         if ($full) {
             foreach ((array) $this->getPermissions() as $uri => $rules) {
