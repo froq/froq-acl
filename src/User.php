@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
+use froq\common\trait\DataTrait;
+
 /**
  * A class, defines its ACL with rules and provides an ability to run ACL related routines.
  *
@@ -17,6 +19,8 @@ namespace froq\acl;
  */
 class User
 {
+    use DataTrait;
+
     /** @var froq\acl\Acl */
     protected Acl $acl;
 
@@ -32,6 +36,9 @@ class User
     /** @var array */
     private array $permissions;
 
+    /** @var array */
+    private array $data = [];
+
     /**
      * Constructor.
      *
@@ -39,14 +46,16 @@ class User
      * @param string|null     $name
      * @param string|null     $role
      * @param array|null      $permissions
+     * @param array|null      $data
      */
     public function __construct(int|string $id = null, string $name = null, string $role = null,
-        array $permissions = null)
+        array $permissions = null, array $data = null)
     {
         $id          && $this->setId($id);
         $name        && $this->setName($name);
         $role        && $this->setRole($role);
         $permissions && $this->setPermissions($permissions);
+        $data        && $this->setData($data);
     }
 
     /**
