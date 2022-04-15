@@ -51,21 +51,24 @@ final class Acl
      */
     public function setUser(User $user): self
     {
-        $this->user = $user;
-        $this->user->setAcl($this);
-
-        $userRole = $this->user->getRole();
-        if ($userRole != null) {
+        $userRole = $user->getRole();
+        if ($userRole) {
             foreach ((array) $this->getRules() as $role => $rules) {
-                if ($userRole == $role) { // Eg: "user" or "admin".
-                    foreach ($rules as $uri => $permission) { // Eg: ["/book" => "read"].
-                        $permission = (array) explode(',', $permission); // Eg: "read" or "read,write".
-                        $this->user->setPermissionsOf($uri, $permission);
+                // Eg: "user" or "admin".
+                if ($userRole == $role) {
+                    // Eg: ["/book" => "read"].
+                    foreach ($rules as $uri => $permission) {
+                        // Eg: "read" or "read,write".
+                        $permission = explode(',', $permission);
+                        $user->setPermissionsOf($uri, $permission);
                     }
                     break;
                 }
             }
         }
+
+        $this->user = $user;
+        $this->user->setAcl($this);
 
         return $this;
     }
