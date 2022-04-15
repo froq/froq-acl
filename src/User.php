@@ -15,10 +15,10 @@ namespace froq\acl;
  * @author  Kerem Güneş
  * @since   1.0
  */
-final class User
+class User
 {
     /** @var froq\acl\Acl */
-    private Acl $acl;
+    protected Acl $acl;
 
     /** @var int|string */
     private int|string $id;
@@ -220,13 +220,13 @@ final class User
     {
         // Eg: /book => all.
         $uriRoot = $this->extractUriRoot($uri);
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
+        if (in_array(Rule::ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
             return true;
         }
 
         // Eg: /book/detail => all or read.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
+            fn($rule) => $rule == Rule::ALL || $rule == Rule::READ);
     }
 
     /**
@@ -239,13 +239,13 @@ final class User
     {
         // Eg: /book => all.
         $uriRoot = $this->extractUriRoot($uri);
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
+        if (in_array(Rule::ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
             return true;
         }
 
         // Eg: /book/detail => all or write.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
+            fn($rule) => $rule == Rule::ALL || $rule == Rule::WRITE);
     }
 
     /**

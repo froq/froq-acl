@@ -15,16 +15,8 @@ namespace froq\acl;
  * @author  Kerem Güneş
  * @since   1.0
  */
-final class Acl
+class Acl
 {
-    /**
-     * Rules.
-     * @const string
-     */
-    public const RULE_ALL   = 'all',
-                 RULE_READ  = 'read',
-                 RULE_WRITE = 'write';
-
     /** @var froq\acl\User */
     private User $user;
 
