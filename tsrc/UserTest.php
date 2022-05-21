@@ -1,16 +1,11 @@
 <?php
 /**
  * Acl / Test.
- * @command ~/.composer/vendor/bin/phpunit --colors=auto Test.php
+ * @command ~/.composer/vendor/bin/phpunit --verbose --colors=auto --bootstrap=./_boot.php ./
  */
-namespace froq\acl\test;
-
-require __dir__ . '/../../../../vendor/autoload.php';
-
 use froq\acl\{Acl, User};
-use PHPUnit\Framework\TestCase;
 
-class Test extends TestCase
+class UserTest extends PHPUnit\Framework\TestCase
 {
     function test_nullUser() {
         $this->assertNull((new Acl)->getUser());
