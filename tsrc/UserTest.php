@@ -1,8 +1,4 @@
 <?php
-/**
- * Acl / Test.
- * @command ~/.composer/vendor/bin/phpunit --verbose --colors=auto --bootstrap=./_boot.php ./
- */
 use froq\acl\{Acl, User};
 
 class UserTest extends PHPUnit\Framework\TestCase

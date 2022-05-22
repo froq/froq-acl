@@ -1,19 +1,27 @@
 <?php
+/**
+ * Acl / Test.
+ * @command ~/.composer/vendor/bin/phpunit --verbose --colors --bootstrap=./_boot.php ./
+ */
+
 $froqFolder = __dir__ . '/../../';
 $froqLoader = __dir__ . '/../../froq/src/Autoloader.php';
 if (is_file($froqLoader)) {
     include $froqLoader;
     $loader = froq\Autoloader::init($froqFolder);
     $loader->register();
-    return;
+    // return;
 }
 
 $composerLoader = $froqFolder . '/vendor/autoload.php';
 if (is_file($composerLoader)) {
     $loader = include $composerLoader;
     $loader->addPsr4('froq\\acl\\', __dir__ . '/../src/');
+
+    $composerJson = file_get_contents(__dir__ . '/../composer.json');
+    $composerData = json_decode($composerJson, true);
+
     // Load deps.
-    $composerData = json_decode(file_get_contents(__dir__ . '/../composer.json'), true);
     foreach ($composerData['require'] as $package => $_) {
         if (substr($package, 0, 5) == 'froq/') {
             $package = substr($package, 5);

@@ -11,5 +11,8 @@
     },
     "autoload": {
         "classmap": ["src/"]
+    },
+    "scripts": {
+        "test": "~/.composer/vendor/bin/phpunit --verbose --colors --bootstrap=tsrc/_boot.php tsrc/"
     }
 }
