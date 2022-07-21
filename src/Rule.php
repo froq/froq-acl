@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\acl;
 
 /**
+ * Enum class for read/write rules.
+ *
  * @package froq\acl
  * @object  froq\acl\Rule
  * @author  Kerem Güneş
@@ -15,7 +17,10 @@ namespace froq\acl;
  */
 class Rule
 {
-    /** @const string */
+    /**
+     * Rules.
+     * @const string
+     */
     public final const ALL   = 'all',
                        READ  = 'read',
                        WRITE = 'write';
