@@ -7,22 +7,22 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
-use froq\acl\Acl;
+use froq\common\trait\DataTrait;
 
 /**
- * User.
- *
- * Represents an user entity which holds its ACL with rules and provides an ability to run ACL related routines.
+ * A class, defines its ACL with rules and provides an ability to run ACL related routines.
  *
  * @package froq\acl
  * @object  froq\acl\User
  * @author  Kerem Güneş
  * @since   1.0
  */
-final class User
+class User
 {
+    use DataTrait;
+
     /** @var froq\acl\Acl */
-    private Acl $acl;
+    protected Acl $acl;
 
     /** @var int|string */
     private int|string $id;
@@ -36,6 +36,9 @@ final class User
     /** @var array */
     private array $permissions;
 
+    /** @var array */
+    private array $data = [];
+
     /**
      * Constructor.
      *
@@ -43,14 +46,23 @@ final class User
      * @param string|null     $name
      * @param string|null     $role
      * @param array|null      $permissions
+     * @param array|null      $data
      */
     public function __construct(int|string $id = null, string $name = null, string $role = null,
-        array $permissions = null)
+        array $permissions = null, array $data = null)
     {
         $id          && $this->setId($id);
         $name        && $this->setName($name);
         $role        && $this->setRole($role);
         $permissions && $this->setPermissions($permissions);
+
+        if ($data) {
+            $this->setData($data);
+
+            // Add spesific fields.
+            isset($data['id'])   && $this->setId($data['id']);
+            isset($data['name']) && $this->setName($data['name']);
+        }
     }
 
     /**
@@ -153,7 +165,9 @@ final class User
      */
     public function setPermissions(array $permissions): self
     {
-        $this->permissions = $permissions;
+        foreach ($permissions as $uri => $rules) {
+            $this->setPermissionsOf($uri, $rules);
+        }
 
         return $this;
     }
@@ -171,12 +185,15 @@ final class User
     /**
      * Set permissions of.
      *
-     * @param  string $uri
-     * @param  array  $rules
+     * @param  string       $uri
+     * @param  string|array $rules
      * @return self
      */
-    public function setPermissionsOf(string $uri, array $rules): self
+    public function setPermissionsOf(string $uri, string|array $rules): self
     {
+        // Eg: "read" or "read,write".
+        is_string($rules) && $rules = explode(',', $rules);
+
         $this->permissions[$uri] = $rules;
 
         return $this;
@@ -224,13 +241,13 @@ final class User
     {
         // Eg: /book => all.
         $uriRoot = $this->extractUriRoot($uri);
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
+        if (in_array(Rule::ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
             return true;
         }
 
         // Eg: /book/detail => all or read.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Acl::RULE_ALL || $rule == Acl::RULE_READ);
+            fn($rule) => $rule == Rule::ALL || $rule == Rule::READ);
     }
 
     /**
@@ -243,13 +260,13 @@ final class User
     {
         // Eg: /book => all.
         $uriRoot = $this->extractUriRoot($uri);
-        if (in_array(Acl::RULE_ALL, (array) $this->getPermissionsOf($uriRoot))) {
+        if (in_array(Rule::ALL, (array) $this->getPermissionsOf($uriRoot), true)) {
             return true;
         }
 
         // Eg: /book/detail => all or write.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Acl::RULE_ALL || $rule == Acl::RULE_WRITE);
+            fn($rule) => $rule == Rule::ALL || $rule == Rule::WRITE);
     }
 
     /**
@@ -260,7 +277,12 @@ final class User
      */
     public function info(bool $full = false): string
     {
-        $ret = sprintf('%s: id=%s(%s)', $this->getRole(), $this->getId(), $this->getName());
+        $ret = sprintf(
+            '%s: id=%s(%s)',
+            $this->getRole() ?? '?',
+            $this->getId()   ?? '?',
+            $this->getName() ?? '?'
+        );
 
         if ($full) {
             foreach ((array) $this->getPermissions() as $uri => $rules) {

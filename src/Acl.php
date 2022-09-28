@@ -7,29 +7,16 @@ declare(strict_types=1);
 
 namespace froq\acl;
 
-use froq\acl\User;
-
 /**
- * Acl.
- *
- * Represents an ACL entity which holds its user and provides an ability to run ACL related routines with that
- * user interface.
+ * A class, defines its user and provides an ability to run ACL related routines.
  *
  * @package froq\acl
  * @object  froq\acl\Acl
  * @author  Kerem Güneş
  * @since   1.0
  */
-final class Acl
+class Acl
 {
-    /**
-     * Rules.
-     * @const string
-     */
-    public const RULE_ALL   = 'all',
-                 RULE_READ  = 'read',
-                 RULE_WRITE = 'write';
-
     /** @var froq\acl\User */
     private User $user;
 
@@ -56,21 +43,23 @@ final class Acl
      */
     public function setUser(User $user): self
     {
-        $this->user = $user;
-        $this->user->setAcl($this);
-
-        $userRole = $this->user->getRole();
-        if ($userRole != null) {
+        $userRole = $user->getRole();
+        if ($userRole) {
             foreach ((array) $this->getRules() as $role => $rules) {
-                if ($userRole == $role) { // Eg: "user" or "admin".
-                    foreach ($rules as $uri => $permission) { // Eg: ["/book" => "read"].
-                        $permission = (array) explode(',', $permission); // Eg: "read" or "read,write".
-                        $this->user->setPermissionsOf($uri, $permission);
+                // Eg: "user" or "admin".
+                if ($userRole == $role) {
+                    // Eg: ["/book" => "read"].
+                    foreach ($rules as $uri => $rule) {
+                        // Eg: "read" or "read,write".
+                        $user->setPermissionsTo($uri, $rule);
                     }
                     break;
                 }
             }
         }
+
+        $this->user = $user;
+        $this->user->setAcl($this);
 
         return $this;
     }
