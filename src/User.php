@@ -247,7 +247,7 @@ class User
 
         // Eg: /book/detail => all or read.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Rule::ALL || $rule == Rule::READ);
+            fn($rule): bool => $rule === Rule::ALL || $rule === Rule::READ);
     }
 
     /**
@@ -266,7 +266,7 @@ class User
 
         // Eg: /book/detail => all or write.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Rule::ALL || $rule == Rule::WRITE);
+            fn($rule): bool => $rule === Rule::ALL || $rule === Rule::WRITE);
     }
 
     /**
