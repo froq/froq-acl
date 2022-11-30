@@ -1,15 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-acl
  */
-declare(strict_types=1);
-
 namespace froq\acl;
 
 /**
  * @package froq\acl
- * @object  froq\acl\AclException
+ * @class   froq\acl\AclException
  * @author  Kerem Güneş
  * @since   1.0
  */
