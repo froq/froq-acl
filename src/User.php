@@ -215,7 +215,7 @@ class User
      */
     public function isLoggedIn(): bool
     {
-        return $this->getId() !== null;
+        return !!$this->getId();
     }
 
     /**
@@ -226,7 +226,7 @@ class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return $this->getPermissionsOf($uri) !== null;
+        return !!$this->getPermissionsOf($uri);
     }
 
     /**
