@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-acl
  */
-declare(strict_types=1);
-
 namespace froq\acl;
 
 use froq\common\trait\DataTrait;
@@ -13,7 +11,7 @@ use froq\common\trait\DataTrait;
  * A class, defines its ACL with rules and provides an ability to run ACL related routines.
  *
  * @package froq\acl
- * @object  froq\acl\User
+ * @class   froq\acl\User
  * @author  Kerem Güneş
  * @since   1.0
  */
@@ -21,22 +19,22 @@ class User
 {
     use DataTrait;
 
-    /** @var froq\acl\Acl */
+    /** Acl instance. */
     protected Acl $acl;
 
-    /** @var int|string */
+    /** User ID. */
     private int|string $id;
 
-    /** @var string */
+    /** User name. */
     private string $name;
 
-    /** @var string */
+    /** User role. */
     private string $role;
 
-    /** @var array */
+    /** User permissions. */
     private array $permissions;
 
-    /** @var array */
+    /** User data (extra). */
     private array $data = [];
 
     /**
@@ -66,7 +64,7 @@ class User
     }
 
     /**
-     * Set ACL property.
+     * Set acl.
      *
      * @param  froq\acl\Acl $acl
      * @return self
@@ -79,7 +77,7 @@ class User
     }
 
     /**
-     * Get ACL property.
+     * Get acl.
      *
      * @return froq\acl\Acl|null
      */
@@ -217,7 +215,7 @@ class User
      */
     public function isLoggedIn(): bool
     {
-        return $this->getId() != null;
+        return !!$this->getId();
     }
 
     /**
@@ -228,7 +226,7 @@ class User
      */
     public function hasAccessTo(string $uri): bool
     {
-        return $this->getPermissionsOf($uri) != null;
+        return !!$this->getPermissionsOf($uri);
     }
 
     /**
@@ -247,7 +245,7 @@ class User
 
         // Eg: /book/detail => all or read.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Rule::ALL || $rule == Rule::READ);
+            fn($rule): bool => $rule === Rule::ALL || $rule === Rule::READ);
     }
 
     /**
@@ -266,7 +264,7 @@ class User
 
         // Eg: /book/detail => all or write.
         return !!array_filter((array) $this->getPermissionsOf($uri),
-            fn($rule) => $rule == Rule::ALL || $rule == Rule::WRITE);
+            fn($rule): bool => $rule === Rule::ALL || $rule === Rule::WRITE);
     }
 
     /**

@@ -1,26 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-acl
  */
-declare(strict_types=1);
-
 namespace froq\acl;
 
 /**
  * A class, defines its user and provides an ability to run ACL related routines.
  *
  * @package froq\acl
- * @object  froq\acl\Acl
+ * @class   froq\acl\Acl
  * @author  Kerem Güneş
  * @since   1.0
  */
 class Acl
 {
-    /** @var froq\acl\User */
+    /** User instance. */
     private User $user;
 
-    /** @var array */
+    /** Rules. */
     private array $rules;
 
     /**
@@ -36,7 +34,7 @@ class Acl
     }
 
     /**
-     * Set ACL user.
+     * Set user.
      *
      * @param  froq\acl\User $user
      * @return self
@@ -44,10 +42,11 @@ class Acl
     public function setUser(User $user): self
     {
         $userRole = $user->getRole();
+
         if ($userRole) {
             foreach ((array) $this->getRules() as $role => $rules) {
                 // Eg: "user" or "admin".
-                if ($userRole == $role) {
+                if ($userRole === $role) {
                     // Eg: ["/book" => "read"].
                     foreach ($rules as $uri => $rule) {
                         // Eg: "read" or "read,write".
@@ -65,7 +64,7 @@ class Acl
     }
 
     /**
-     * Get ACL user.
+     * Get user.
      *
      * @return froq\acl\User|null
      */
@@ -75,7 +74,7 @@ class Acl
     }
 
     /**
-     * Set ACL user rules.
+     * Set rules.
      *
      * @param  array $rules
      * @return self
@@ -88,7 +87,7 @@ class Acl
     }
 
     /**
-     * Get ACL user rules.
+     * Get rules.
      *
      * @return array|null
      */
